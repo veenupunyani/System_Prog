@@ -1,0 +1,15 @@
+# Compiled binaries
+pipe_demo
+*.o
+*.out
+a.out
+
+# Editor and IDE files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# System files
+.DS_Store
