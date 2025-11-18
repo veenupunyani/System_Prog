@@ -1,22 +1,10 @@
-/* 
- * Example of synchronization using a pipe.
- * Author: Sourav Mukherjee (sourav@fdu.edu)
- * 
- * Imagine a parent process P creates two child processes C1 and C2.
- * Each child process must complete two tasks T1 and T2.
- * After C1 and C2 have both completed T1, the parent must print:
- * "All children have completed their first task."
- * After C1 and C2 have completed T2 and called exit, the parent must print:
- * "All children have completed their second task as well."
- */
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h> /* for p_id */
-#include <unistd.h> /* for pipe, sleep, fork  */
-#include <sys/wait.h> /* for wait */
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
-# define BUF_SIZE 1
+#define BUF_SIZE 1
 
 void doTask(int childIndex, char* taskName)
 {
@@ -25,7 +13,7 @@ void doTask(int childIndex, char* taskName)
 
 int main(int argc, char *argv[])
 {
-    int pd[2]; /* pipe descriptors */
+    int pd[2];
     pid_t child;
     int status, childStatus, index;
     char buffer[BUF_SIZE];
@@ -44,14 +32,13 @@ int main(int argc, char *argv[])
                 printf("Could not created child.\n");
                 exit(EXIT_FAILURE);
 
-            case 0: /* child process */
+            case 0:
                 status = close(pd[0]);
                 if(status == -1){
                     printf("Child process could not close read end of pipe.\n");
                     _exit(EXIT_FAILURE);
                 }
 
-                
                 doTask(index, "T1");
 
                 status = close(pd[1]);
@@ -71,7 +58,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    /* Parent process */
     status = close(pd[1]);
     if (status == -1){
             printf("Parent process could not close write end of pipe.\n");
